@@ -52,12 +52,12 @@ router.get(
     }
     const type = typeOptions[Math.floor(Math.random() * typeOptions.length)];
     const images = cellImages[type].slice();
-    // randomly sample at least 10 images
-    const sampleSize = Math.min(10, images.length);
+    // randomly sample at most 16 images
+    const sampleSize = Math.min(16, images.length);
     const sample: string[] = [];
     for (let i = 0; i < sampleSize; i++) {
       const index = Math.floor(Math.random() * images.length);
-      sample.push(images[index]);
+      sample.push(images[index].replace('\\', '/'));
       images.splice(index, 1);
     }
     res.status(200).json({

@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { redirect } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Compare from './marrow-cells/Compare';
-// import Identify from './marrow-cells/Identify';
 import { Helmet } from 'react-helmet';
 import { CellTypes } from '../marrow-cell-types';
 import { getTypes } from './marrow-cells/api';
 import { DataProvider } from './DataContext';
 
 function Redirect({ to }: { to: string }) {
+  const navigate = useNavigate();
   useEffect(() => {
-    redirect(to);
+    navigate(to, { replace: true });
   }, []);
   return null;
 }
@@ -39,7 +39,7 @@ export default function App() {
 
   return (
     <>
-      <div className="p-8 flex flex-col gap-2">
+      <div className="p-8 lg:p-16 flex flex-col gap-2">
         <Helmet>
           <title>Bone Marrow Cell Database</title>
         </Helmet>
@@ -64,6 +64,7 @@ export default function App() {
             classified into a specific cell type.
           </li>
         </ul>
+        <div className="divider" />
         {cellTypes ? (
           <DataProvider data={{ cellTypes }}>
             <RouterProvider router={router} />

@@ -19,5 +19,5 @@ export async function getTypes(): Promise<CellTypes> {
 }
 
 export function getDataUrl(filename: string): string {
-  return `${SERVER_BASE_PATH}marrow-cell-data/bone_marrow_cecll_dataset/${filename}`;
+  return `${SERVER_BASE_PATH}marrow-cell-data/bone_marrow_cell_dataset/${filename}`;
 }

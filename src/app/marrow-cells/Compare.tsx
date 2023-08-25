@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { RandomResult } from '../../marrow-cell-types';
-import { getImages } from './api';
+import { getDataUrl, getImages } from './api';
 import { useData } from '../DataContext';
 
 interface CompareParams {
@@ -69,52 +69,32 @@ export default function Compare(): JSX.Element {
 
   useEffect(() => {
     loadImages(1);
+    setSearchParams(compareToParams({ type1: cellType1, type2: cellType2 }));
   }, [cellType1]);
 
   useEffect(() => {
     loadImages(2);
+    setSearchParams(compareToParams({ type1: cellType1, type2: cellType2 }));
   }, [cellType2]);
 
   useEffect(() => {
-    const newFilter = paramsToCompare(searchParams);
-    setCellType1(newFilter.type1);
-    setCellType2(newFilter.type2);
-  }, [searchParams]);
-
-  const updateParams = (
-    type1: string | undefined,
-    type2: string | undefined
-  ) => {
-    setSearchParams(compareToParams({ type1, type2 }));
-  };
+    const params = paramsToCompare(searchParams);
+    setCellType1(params.type1);
+    setCellType2(params.type2);
+  }, []);
 
   return (
     <>
-      <div className="tabs">
-        <a
-          className={`tab tab-bordered ${
-            location.pathname.startsWith('/compare') ? 'tab-active' : ''
-          }`}
-        >
-          Compare
-        </a>
-        <a
-          className={`tab tab-bordered ${
-            location.pathname.startsWith('/compare') ? 'tab-active' : ''
-          }`}
-        >
-          Identify
-        </a>
-      </div>
-      <div className="flex w-full items-center gap-4">
-        <div className="flex flex-col gap-4">
+      <div className="flex w-full items-start gap-4 flex-col md:flex-row">
+        <div className="flex flex-1 flex-col gap-4 items-center">
           <div className="form-control w-full max-w-xs">
             <select
               className={`select select-bordered ${
                 loading1 ? 'animate-pulse' : ''
               }`}
               disabled={loading1}
-              onChange={e => updateParams(e.target.value, cellType2)}
+              value={cellType1}
+              onChange={e => setCellType1(e.target.value)}
             >
               <option disabled selected>
                 Select a cell type
@@ -129,25 +109,31 @@ export default function Compare(): JSX.Element {
               <span
                 className={`label-text-alt ${!imageSet1 ? 'invisible' : ''}`}
               >
-                {imageSet1?.count ?? 0}
+                {imageSet1?.count ?? 0} cells of this type found
               </span>
             </label>
           </div>
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap gap-4 justify-center">
             {imageSet1?.images.map(image => (
-              <img key={image} src={image} className="shadow-lg" alt="Cell" />
+              <img
+                key={image}
+                src={getDataUrl(image)}
+                className="shadow-lg"
+                alt="Cell"
+              />
             ))}
           </div>
         </div>
-        <div className="divider divider-horizontal"></div>
-        <div className="flex flex-col gap-4">
+        <div className="divider md:divider-horizontal"></div>
+        <div className="flex flex-1 flex-col gap-4 items-center">
           <div className="form-control w-full max-w-xs">
             <select
               className={`select select-bordered ${
                 loading2 ? 'animate-pulse' : ''
               }`}
               disabled={loading2}
-              onChange={e => updateParams(e.target.value, cellType2)}
+              value={cellType2}
+              onChange={e => setCellType2(e.target.value)}
             >
               <option disabled selected>
                 Select a cell type
@@ -162,13 +148,18 @@ export default function Compare(): JSX.Element {
               <span
                 className={`label-text-alt ${!imageSet2 ? 'invisible' : ''}`}
               >
-                {imageSet2?.count ?? 0}
+                {imageSet2?.count ?? 0} cells of this type found
               </span>
             </label>
           </div>
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap gap-4 justify-center">
             {imageSet2?.images.map(image => (
-              <img key={image} src={image} className="shadow-lg" alt="Cell" />
+              <img
+                key={image}
+                src={getDataUrl(image)}
+                className="shadow-lg"
+                alt="Cell"
+              />
             ))}
           </div>
         </div>
