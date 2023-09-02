@@ -1,6 +1,7 @@
 import fs from 'fs/promises';
 import { CellTypes } from '../../marrow-cell-types';
 import { Glob } from 'glob';
+import { log } from '../helper';
 
 const DATA_DIR = 'dist/app/marrow-cell-data/';
 
@@ -8,7 +9,7 @@ export let cellTypes: CellTypes;
 export let cellImages: { [key: string]: string[] };
 
 export async function readData(): Promise<void> {
-  console.log('Marrow cells: Reading labels');
+  log('Marrow cells: Reading labels');
 
   cellTypes = {};
   const data = await fs.readFile(DATA_DIR + 'abbreviations.csv', {
@@ -22,7 +23,7 @@ export async function readData(): Promise<void> {
       cellTypes[key] = description;
     });
 
-  console.log('Marrow cells: Indexing images');
+  log('Marrow cells: Indexing images');
 
   cellImages = {};
   const directories = (

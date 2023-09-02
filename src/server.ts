@@ -6,6 +6,7 @@ import cors from 'cors';
 import { isBoom } from '@hapi/boom';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { log } from './lib/helper';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -44,7 +45,7 @@ app.get('*', (_req, res) => {
 Promise.all([
   (async () => {
     await readData();
-    console.log(
+    log(
       `Marrow cells: ${
         Object.keys(cellImages).length
       } cell types and ${Object.values(cellImages).reduce(
@@ -55,6 +56,6 @@ Promise.all([
   })(),
 ]).then(() => {
   app.listen(PORT, () => {
-    console.log(`Server listening at http://localhost:${PORT}`);
+    log(`Server listening at http://localhost:${PORT}`);
   });
 });

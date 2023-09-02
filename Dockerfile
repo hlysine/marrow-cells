@@ -13,6 +13,9 @@ RUN apt-get update && apt-get install -y \
 # Install kaggle silently
 RUN yes | pip3 install kaggle --exists-action i --break-system-packages
 
+# Install pm2
+RUN npm install pm2 -g
+
 # Switch to the "user" user
 USER user
 
@@ -43,4 +46,5 @@ RUN --mount=type=secret,id=KAGGLE_USERNAME,mode=0444,required=true \
     kaggle datasets download -d andrewmvd/bone-marrow-cell-classification --unzip -p $HOME/app/dist/app/marrow-cell-data
 
 EXPOSE 7860
-CMD [ "npm", "run", "start" ]
+# CMD [ "npm", "run", "start" ]
+CMD ["pm2-runtime", "processes.json"]
